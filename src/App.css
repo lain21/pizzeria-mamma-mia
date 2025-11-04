@@ -1,0 +1,37 @@
+/* === HERO BANNER (HEADER CENTRAL CON BORDE) === */
+.hero-banner {
+  position: relative;
+  width: 100%;
+  height: 420px; /* <-- antes era más chico, ahora ocupa más alto */
+  overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  filter: brightness(60%);
+}
+
+.hero-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  text-align: center;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+.hero-text h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+}
+
+.hero-text p {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
