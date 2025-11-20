@@ -11,9 +11,13 @@ export default function CardPizza({ name, price, ingredients, img }) {
         <div className="line"></div>
 
         <h6 className="text-muted fw-semibold mb-2 mt-3">Ingredientes:</h6>
-        <p className="text-secondary small mb-3">
-          🍕 {ingredients.join(', ')}
-        </p>
+
+        {/* ✔️ AQUÍ SE CUMPLE EL HITO 3 CON <li> */}
+        <ul className="text-secondary small mb-3 list-unstyled">
+          {ingredients.map((ing, index) => (
+            <li key={index}>🍕 {ing}</li>
+          ))}
+        </ul>
 
         <div className="line"></div>
 
