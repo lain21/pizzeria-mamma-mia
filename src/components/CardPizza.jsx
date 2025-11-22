@@ -1,5 +1,7 @@
-export default function CardPizza({ name, price, ingredients, img }) {
-  const priceCLP = price.toLocaleString('es-CL');
+import { Link } from "react-router-dom";
+
+export default function CardPizza({ id, name, price, ingredients, img }) {
+  const priceCLP = price.toLocaleString("es-CL");
 
   return (
     <div className="card pizza-card">
@@ -12,7 +14,6 @@ export default function CardPizza({ name, price, ingredients, img }) {
 
         <h6 className="text-muted fw-semibold mb-2 mt-3">Ingredientes:</h6>
 
-        {/* ✔️ AQUÍ SE CUMPLE EL HITO 3 CON <li> */}
         <ul className="text-secondary small mb-3 list-unstyled">
           {ingredients.map((ing, index) => (
             <li key={index}>🍕 {ing}</li>
@@ -26,7 +27,11 @@ export default function CardPizza({ name, price, ingredients, img }) {
         <div className="line"></div>
 
         <div className="d-flex justify-content-center gap-2 mt-3">
-          <button className="btn btn-outline-primary w-50">Ver más 👀</button>
+          {/* 🔥 ESTE ES EL CAMBIO OBLIGATORIO DEL HITO 4 */}
+          <Link to={`/pizza/${id}`} className="btn btn-outline-primary w-50">
+            Ver más 👀
+          </Link>
+
           <button className="btn btn-primary w-50">Añadir 🛒</button>
         </div>
       </div>
