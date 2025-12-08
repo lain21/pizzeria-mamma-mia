@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
 
 export default function Navbar() {
-  const total = 25000;
+  const { total } = useContext(CartContext); // <-- usamos el contexto
+
   const totalCLP = total.toLocaleString("es-CL");
 
   return (
@@ -25,7 +28,7 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* Botón de carrito que redirige a /cart */}
+      {/* Carrito mostrando total real */}
       <div>
         <Link to="/cart" className="btn btn-success">
           🛒 Total: ${totalCLP}

@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
 
 export default function CardPizza({ id, name, price, ingredients, img }) {
+  const { addToCart } = useContext(CartContext);
+
   const priceCLP = price.toLocaleString("es-CL");
 
   return (
@@ -27,12 +31,25 @@ export default function CardPizza({ id, name, price, ingredients, img }) {
         <div className="line"></div>
 
         <div className="d-flex justify-content-center gap-2 mt-3">
-          {/* 🔥 ESTE ES EL CAMBIO OBLIGATORIO DEL HITO 4 */}
           <Link to={`/pizza/${id}`} className="btn btn-outline-primary w-50">
             Ver más 👀
           </Link>
 
-          <button className="btn btn-primary w-50">Añadir 🛒</button>
+          {/* 💥 Aquí agregamos al carrito */}
+          <button
+            className="btn btn-primary w-50"
+            onClick={() =>
+              addToCart({
+                id,
+                name,
+                price,
+                img,
+                ingredients,
+              })
+            }
+          >
+            Añadir 🛒
+          </button>
         </div>
       </div>
     </div>

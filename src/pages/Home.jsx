@@ -1,15 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import Header from "../components/Header";
 import CardPizza from "../components/CardPizza";
+import { PizzaContext } from "../context/PizzaContext";
 
 export default function Home() {
-  const [pizzas, setPizzas] = useState([]);
+  const { pizzas, loading } = useContext(PizzaContext);
 
-  useEffect(() => {
-    fetch("http://localhost:5000/api/pizzas")
-      .then((res) => res.json())
-      .then((data) => setPizzas(data));
-  }, []);
+  if (loading) return <p className="text-center my-5">Cargando pizzas...</p>;
 
   return (
     <main className="container my-4">
