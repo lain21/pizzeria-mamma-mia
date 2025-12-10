@@ -1,9 +1,12 @@
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
+import { UserContext } from "../context/UserContext"; // ⬅ IMPORTANTE
 
 export default function Cart() {
   const { cart, incrementItem, decrementItem, removeFromCart, total } =
     useContext(CartContext);
+
+  const { token } = useContext(UserContext); // ⬅ leemos el token
 
   return (
     <div className="container my-4">
@@ -73,7 +76,17 @@ export default function Cart() {
       {/* Total */}
       <h3 className="fw-bold mt-4">Total: ${total.toLocaleString("es-CL")}</h3>
 
-      <button className="btn btn-dark mt-3 px-5">Pagar</button>
+      {/* Botón Pagar (deshabilitado si token = false) */}
+      <button className="btn btn-dark mt-3 px-5" disabled={!token}>
+        Pagar
+      </button>
+
+      {/* Mensaje opcional */}
+      {!token && (
+        <p className="text-danger mt-2">
+          Debes iniciar sesión para completar el pago.
+        </p>
+      )}
     </div>
   );
 }

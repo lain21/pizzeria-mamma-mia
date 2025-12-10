@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
+import { UserContext } from "../context/UserContext";
 
 export default function Navbar() {
-  const { total } = useContext(CartContext); // <-- usamos el contexto
+  const { total } = useContext(CartContext);
+  const { token, logout } = useContext(UserContext);
 
   const totalCLP = total.toLocaleString("es-CL");
 
@@ -15,20 +17,31 @@ export default function Navbar() {
           🍕 Home
         </Link>
 
-        <Link to="/register" className="btn btn-outline-light">
-          📝 Register
-        </Link>
+        {/* 🔐 Mostrar según el token */}
+        {token ? (
+          <>
+            <Link to="/profile" className="btn btn-outline-light">
+              👤 Profile
+            </Link>
 
-        <Link to="/login" className="btn btn-outline-light">
-          🔐 Login
-        </Link>
+            <button className="btn btn-outline-warning" onClick={logout}>
+              🚪 Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/register" className="btn btn-outline-light">
+              📝 Register
+            </Link>
 
-        <Link to="/profile" className="btn btn-outline-light">
-          👤 Profile
-        </Link>
+            <Link to="/login" className="btn btn-outline-light">
+              🔐 Login
+            </Link>
+          </>
+        )}
       </div>
 
-      {/* Carrito mostrando total real */}
+      {/* Carrito con total */}
       <div>
         <Link to="/cart" className="btn btn-success">
           🛒 Total: ${totalCLP}

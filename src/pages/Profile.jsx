@@ -1,9 +1,12 @@
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
+
 export default function Profile() {
+  const { token } = useContext(UserContext);
+
   return (
-    <div className="container mt-4">
-      <h1>Perfil de Usuario</h1>
-      <p>Email: usuario@example.com</p>
-      <button className="btn btn-danger">Cerrar sesión</button>
+    <div>
+      <h1>Valor del Token: {String(token)}</h1>
     </div>
   );
 }
