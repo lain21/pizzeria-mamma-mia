@@ -1,12 +1,47 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
-import { UserContext } from "../context/UserContext"; // ⬅ IMPORTANTE
+import { UserContext } from "../context/UserContext";
 
 export default function Cart() {
-  const { cart, incrementItem, decrementItem, removeFromCart, total } =
-    useContext(CartContext);
+  const {
+    cart,
+    incrementItem,
+    decrementItem,
+    removeFromCart,
+    total,
+    clearCart,
+  } = useContext(CartContext);
 
-  const { token } = useContext(UserContext); // ⬅ leemos el token
+  const { token } = useContext(UserContext);
+
+  const [msg, setMsg] = useState("");
+
+  const handlePay = async () => {
+    setMsg("");
+
+    try {
+      const res = await fetch("http://localhost:5000/api/checkouts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // 🔐 token del usuario
+        },
+        body: JSON.stringify({ total }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.error || "Error en el pago");
+      }
+
+      // Si todo OK
+      setMsg("🎉 ¡Pago realizado con éxito!");
+      clearCart(); // Vaciar carrito
+    } catch (err) {
+      setMsg(`❌ Error: ${err.message}`);
+    }
+  };
 
   return (
     <div className="container my-4">
@@ -21,7 +56,6 @@ export default function Cart() {
           key={pizza.id}
           className="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2"
         >
-          {/* Imagen + Nombre */}
           <div className="d-flex align-items-center gap-3">
             <img
               src={pizza.img}
@@ -36,13 +70,11 @@ export default function Cart() {
             <span className="fw-semibold">{pizza.name}</span>
           </div>
 
-          {/* Precio + Controles */}
           <div className="d-flex align-items-center gap-3">
             <span className="fw-bold">
               ${pizza.price.toLocaleString("es-CL")}
             </span>
 
-            {/* Botón restar */}
             <button
               className="btn btn-sm btn-outline-danger fw-bold"
               style={{ width: "35px" }}
@@ -53,7 +85,6 @@ export default function Cart() {
 
             <span className="fw-bold">{pizza.quantity}</span>
 
-            {/* Botón sumar */}
             <button
               className="btn btn-sm btn-outline-primary fw-bold"
               style={{ width: "35px" }}
@@ -62,7 +93,6 @@ export default function Cart() {
               +
             </button>
 
-            {/* Botón eliminar */}
             <button
               className="btn btn-sm btn-outline-secondary fw-bold"
               onClick={() => removeFromCart(pizza.id)}
@@ -73,15 +103,20 @@ export default function Cart() {
         </div>
       ))}
 
-      {/* Total */}
       <h3 className="fw-bold mt-4">Total: ${total.toLocaleString("es-CL")}</h3>
 
-      {/* Botón Pagar (deshabilitado si token = false) */}
-      <button className="btn btn-dark mt-3 px-5" disabled={!token}>
+      {/* Botón de pago */}
+      <button
+        className="btn btn-dark mt-3 px-5"
+        disabled={!token || cart.length === 0}
+        onClick={handlePay}
+      >
         Pagar
       </button>
 
-      {/* Mensaje opcional */}
+      {/* Mensajes */}
+      {msg && <p className="mt-3 fw-bold">{msg}</p>}
+
       {!token && (
         <p className="text-danger mt-2">
           Debes iniciar sesión para completar el pago.

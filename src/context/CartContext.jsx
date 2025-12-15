@@ -13,18 +13,16 @@ const CartProvider = ({ children }) => {
       const existing = prevCart.find((item) => item.id === pizza.id);
 
       if (existing) {
-        // si ya existe, solo aumento la cantidad
         return prevCart.map((item) =>
           item.id === pizza.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
 
-      // si no existe, lo agrego con quantity = 1
       return [...prevCart, { ...pizza, quantity: 1 }];
     });
   };
 
-  // Aumentar cantidad de un producto
+  // Aumentar cantidad
   const incrementItem = (id) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
@@ -33,24 +31,28 @@ const CartProvider = ({ children }) => {
     );
   };
 
-  // Disminuir cantidad de un producto
+  // Disminuir cantidad
   const decrementItem = (id) => {
-    setCart(
-      (prevCart) =>
-        prevCart
-          .map((item) =>
-            item.id === id ? { ...item, quantity: item.quantity - 1 } : item
-          )
-          .filter((item) => item.quantity > 0) // si llega a 0, se elimina
+    setCart((prevCart) =>
+      prevCart
+        .map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+        )
+        .filter((item) => item.quantity > 0)
     );
   };
 
-  // Eliminar producto del carrito
+  // Eliminar item
   const removeFromCart = (id) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== id));
   };
 
-  // Total del carrito (precio * cantidad)
+  // 🔥 NUEVO: Vaciar carrito después del pago
+  const clearCart = () => {
+    setCart([]);
+  };
+
+  // Total del carrito
   const total = useMemo(
     () => cart.reduce((acc, item) => acc + item.price * item.quantity, 0),
     [cart]
@@ -62,6 +64,7 @@ const CartProvider = ({ children }) => {
     incrementItem,
     decrementItem,
     removeFromCart,
+    clearCart, // <-- 🔥 agregado aquí
     total,
   };
 
